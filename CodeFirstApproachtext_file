@@ -1,0 +1,65 @@
+
+step 1:
+install packages
+Microsoft.EntityFrameworkCore.Tools: This package provides the tools needed for working with Entity Framework Core, including migrations.
+Microsoft.EntityFrameworkCore.Design:This package includes additional design-time components for Entity Framework Core.
+Microsoft.EntityFrameworkCore.SqlServer:This package provides support for SQL Server as the database provider.
+
+
+Microsoft.Extensions.Configuration.Json:
+  ---This package allows you to read configuration settings from a JSON file.
+Microsoft.Extensions.Configuration.FileExtensions: 
+  ---This package provides additional file-based configuration capabilities.
+Microsoft.Extensions.Configuration.EnvironmentVariables:
+  ---This package allows you to read configuration settings from environment variables.
+
+
+step 2:
+create model.
+Add modelclass(create tables in visual studio)
+
+
+step 3:
+Create DbContext Class:
+
+crete new folder named as Data.
+and add following code:
+
+    public class SContext :DbContext
+    {
+        public SContext(DbContextOptions<SContext> options) : base(options) 
+        {
+                
+        }
+        public DbSet<Student> Student_table { get; set; }
+        public DbSet<Login> tbl_login { get; set; }
+    }
+
+
+ step 4:
+ Configure Connection String:  
+ add following code .
+
+   "ConnectionStrings": {
+    "dbcs": "Server=SherryRocks;Database=coreCrud;Trusted_Connection=True;Integrated Security=True;"
+  },
+
+
+  step 5:
+  Configure Dependency Injection in program.cs file:(Before Build)
+
+  
+// 1. Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// 2. Configure database context.
+ConfigurationManager configuration = builder.Configuration;
+builder.Services.AddDbContext<SContext>(item => item.UseSqlServer(configuration.GetConnectionString("dbcs")));
+
+
+step 6:
+ 
+ add-migration migration_name
+ update-database
+
+
